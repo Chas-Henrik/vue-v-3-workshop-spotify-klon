@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Song } from '../types'
-
+import type { Song, Playlist } from '../types'
+import { usePlayerStore } from '../stores/playerStore.ts'
 // TODO: När användaren klickar "Spela", uppdatera playerStore
 // istället för att bara logga. Importera och använd:
 // import { usePlayerStore } from '../stores/playerStore'
@@ -9,8 +9,11 @@ import type { Song } from '../types'
 // - state: currentSong, isPlaying
 // - actions: playSong(song), pause(), togglePlay()
 
-defineProps<{
+
+const playerstore = usePlayerStore()
+const props = defineProps<{
   songs: Song[]
+  playlist?: Playlist
 }>()
 
 // Formatera tid till MM:SS
@@ -22,6 +25,7 @@ const formatDuration = (seconds: number): string => {
 
 // TODO: Byt ut console.log mot playerStore.playSong(song)
 const handlePlay = (song: Song) => {
+  playerstore.currentPlaylist = props.playlist || null
   console.log('Försöker spela:', song.title)
   console.log('Men ingenting händer... spelaren vet inte om detta!')
   // playerStore.playSong(song)

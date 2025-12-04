@@ -24,7 +24,7 @@ const playlist = computed(() => musicStore.getPlaylistById(playlistId.value))
 const playlistSongs = computed<Song[]>(() => {
   if (!playlist.value) return []
   return playlist.value.songIds
-    .map(id => allSongs.find(song => song.id === id))
+    .map(id => musicStore.songsData.find(song => song.id === id))
     .filter((song): song is Song => song !== undefined)
 })
 </script>

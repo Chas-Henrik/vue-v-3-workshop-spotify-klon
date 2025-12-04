@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import SongList from '../components/SongList.vue'
-import { songs as mockSongs } from '../data/mockData'
 
 // TODO: Flytta songs till musicLibraryStore istället för lokalt state
 // Skapa stores/musicLibraryStore.ts med:
 // - state: songs, playlists
 // - getters: allSongs, getSongById(id), getPlaylistById(id)
 // Importera och använd sedan:
-// import { useMusicLibraryStore } from '../stores/musicLibraryStore'
-// const musicStore = useMusicLibraryStore()
+import { useMusicLibraryStore } from '../stores/musicLibraryStore.ts'
+const musicStore = useMusicLibraryStore()
 // Använd musicStore.songs istället för lokalt state
 
-const songs = ref(mockSongs)
+const songs = ref(musicStore.songsData)
 </script>
 
 <template>

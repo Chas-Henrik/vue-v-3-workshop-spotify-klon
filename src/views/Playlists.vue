@@ -5,11 +5,11 @@ import { playlists as mockPlaylists } from '../data/mockData'
 
 // TODO: Flytta playlists till musicLibraryStore istället för lokalt state
 // Importera och använd:
-// import { useMusicLibraryStore } from '../stores/musicLibraryStore'
-// const musicStore = useMusicLibraryStore()
+import { useMusicLibraryStore } from '../stores/musicLibraryStore.ts'
+const musicStore = useMusicLibraryStore()
 // Använd musicStore.playlists istället för lokalt state
 
-const playlists = ref(mockPlaylists)
+const playlists = ref(musicStore.playlistsData)
 </script>
 
 <template>
