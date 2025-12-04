@@ -13,12 +13,12 @@ const route = useRoute()
 const playlistId = computed(() => Number(route.params.id))
 // 
 // Hämta spellista baserat på route param:
-// import { useMusicLibraryStore } from '../stores/musicLibraryStore'
-// const musicStore = useMusicLibraryStore()
-// const playlist = computed(() => musicStore.getPlaylistById(playlistId.value))
+import { useMusicLibraryStore } from '../stores/musicLibraryStore.ts'
+const musicStore = useMusicLibraryStore()
+const playlist = computed(() => musicStore.getPlaylistById(playlistId.value))
 
 // PROBLEM: Hårdkodat till första spellistan - oavsett vilken URL!
-const playlist = ref(playlists[playlistId.value - 1])
+// const playlist = ref(playlists[playlistId.value - 1])
 
 // Hämta låtarna som tillhör spellistan
 const playlistSongs = computed<Song[]>(() => {
