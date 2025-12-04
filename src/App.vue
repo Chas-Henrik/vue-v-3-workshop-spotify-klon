@@ -5,6 +5,8 @@ import Playlists from './views/Playlists.vue'
 import PlaylistDetail from './views/PlaylistDetail.vue'
 import Search from './views/Search.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
+import { RouterView } from 'vue-router'
+import router from './router'
 
 // TODO: Det finns ingen routing än! 
 // Skapa routes för /, /playlists, /playlists/:id, /search
@@ -13,15 +15,16 @@ import MusicPlayer from './components/MusicPlayer.vue'
 
 // Ersätt sedan <Library /> nedan med <RouterView />
 // Importera RouterView från vue-router:
-// import { RouterView } from 'vue-router'
+
 
 // Vilket menyval är aktivt (funkar inte utan routing)
 const activeView = ref('library')
 
 // TODO: Ersätt denna funktion med <RouterLink> eller router.push()
 const navigateTo = (view: string) => {
-  console.log('Försöker navigera till:', view)
-  console.log('Men det finns ingen router... ingenting händer!')
+  activeView.value = view
+  router.push(`/${view}`) // Navigera till den valda vyn
+
 //activeView.value = view // Gör ingenting utan riktig routing
 }
 </script>
@@ -40,12 +43,13 @@ const navigateTo = (view: string) => {
         <button 
           class="nav-btn" 
           :class="{ active: activeView === 'library' }"
-          @click="navigateTo('library')"
+          @click="navigateTo('')"
         >
           Bibliotek
         </button>
         
         <!-- TODO: Byt ut mot <RouterLink > -->
+
         <button 
           class="nav-btn"
           :class="{ active: activeView === 'playlists' }"
@@ -69,10 +73,11 @@ const navigateTo = (view: string) => {
     <main class="main-content">
       <!-- TODO: Ersätt <Library /> med <RouterView /> -->
       <!-- Just nu visas alla vyer under varandra oavsett vad man klickar på -->
-      <Library />
+      <!-- <Library />
 	  <Playlists />
 	  <PlaylistDetail />
-	  <Search />
+	  <Search /> -->
+    <RouterView />
     </main>
 
     <!-- Music player (fixed at bottom) -->
