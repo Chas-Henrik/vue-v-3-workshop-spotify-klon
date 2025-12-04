@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Playlist } from '../types'
-import router from '../router'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 defineProps<{
   playlist: Playlist

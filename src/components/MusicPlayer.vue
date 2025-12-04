@@ -10,7 +10,7 @@ import { usePlayerStore } from '../stores/playerStore.ts'
 // - actions: playSong(song), pause(), resume(), togglePlay()
 
 const playerStore = usePlayerStore()
-const { currentSong, currentTime, duration, isPlaying } = storeToRefs(playerStore)
+const { currentSong, currentTime, duration, progress, isPlaying } = storeToRefs(playerStore)
 
 
 // Formatera tid till MM:SS
@@ -63,7 +63,7 @@ const formatTime = (seconds: number): string => {
       <div class="progress-section">
         <span class="time">{{ formatTime(currentTime) }}</span>
         <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: playerStore.progressionPercentage() + '%' }"></div>
+          <div class="progress-fill" :style="{ width: progress + '%' }"></div>
         </div>
         <span class="time">{{ currentSong ? formatTime(duration) : '0:00' }}</span>
       </div>

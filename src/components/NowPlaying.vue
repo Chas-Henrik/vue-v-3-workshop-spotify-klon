@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import type { Song } from '../types'
-import { ref } from 'vue'
 
 // TODO: Denna komponent visar "Spelas nu" men vet inte vad som spelas!
 // Hämta currentSong och isPlaying från playerStore:
-// import { usePlayerStore } from '../stores/playerStore'
-// const playerStore = usePlayerStore()
-// Använd sedan playerStore.currentSong och playerStore.isPlaying
+import { usePlayerStore } from '../stores/playerStore'
+import { storeToRefs } from 'pinia'
 
-// Lokalt state som aldrig uppdateras - problemet!
-const currentSong = ref<Song | null>(null)
-const isPlaying = ref(false)
+const playerStore = usePlayerStore()
+const { currentSong, isPlaying } = storeToRefs(playerStore)
+
 </script>
 
 <template>

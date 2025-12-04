@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import SongList from '../components/SongList.vue'
-import type { Song } from '../types'
 
 // TODO: Implementera sökning med musicLibraryStore
-// Importera och använd:
 import { useMusicLibraryStore } from '../stores/musicLibraryStore'
 const musicStore = useMusicLibraryStore()
 

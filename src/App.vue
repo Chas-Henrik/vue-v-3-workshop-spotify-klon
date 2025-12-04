@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import Library from './views/Library.vue'
-import Playlists from './views/Playlists.vue'
-import PlaylistDetail from './views/PlaylistDetail.vue'
-import Search from './views/Search.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import { RouterView } from 'vue-router'
-import router from './router'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // TODO: Det finns ingen routing än! 
 // Skapa routes för /, /playlists, /playlists/:id, /search

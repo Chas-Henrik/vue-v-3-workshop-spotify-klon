@@ -1,20 +1,57 @@
 import { defineStore } from 'pinia'
-import { ref } from "vue"
+import { computed, ref, watch } from "vue"
 import type { Playlist, Song } from '../types'
 import { useMusicLibraryStore } from './musicLibraryStore'
 
-const currentSong = ref<Song | null>(null)
-const currentPlaylist = ref<Playlist | null>(null)
-const isPlaying = ref<Boolean>(false)
-const currentTime = ref<number>(0)
-const duration = ref<number>(0)
-
 export const usePlayerStore = defineStore('player-store', () => {
-
   const musicLibraryStore = useMusicLibraryStore()
+
+  const currentSong = ref<Song | null>(null)
+  const currentPlaylist = ref<Playlist | null>(null)
+  const isPlaying = ref<boolean>(false)
+  const currentTime = ref<number>(0)
+
+  const duration = computed<number>(() => {
+    return currentSong.value ? currentSong.value.duration : 0
+  })
+
+  const progress = computed<number>(() => {
+    if (duration.value === 0) return 0
+    return (currentTime.value / duration.value) * 100
+  })
+
+  let timerInterval: number | null = null
+
+  // Watch isPlaying and start/stop timer
+  watch(isPlaying, (playing) => {
+    if (playing) {
+      // Start timer
+      timerInterval = window.setInterval(() => {
+        if (currentTime.value < duration.value) {
+          currentTime.value += 1
+        } else {
+          // Song finished
+          currentTime.value = 0
+          if (hasNextSong()) {
+            nextSong()
+          }
+          else {
+            isPlaying.value = false
+          }
+        }
+      }, 1000)
+    } else {
+      // Stop timer
+      if (timerInterval !== null) {
+        clearInterval(timerInterval)
+        timerInterval = null
+      }
+    }
+  })
 
   function playSong(song : Song) {
     currentSong.value = song
+    currentTime.value = 0
     isPlaying.value = true
   }
 
@@ -32,6 +69,7 @@ export const usePlayerStore = defineStore('player-store', () => {
         const songIds = currentPlaylist.value.songIds
         const nextIndex = songIds.findIndex(id => id === (currentSong.value?.id ?? 0)) + 1
         currentSong.value = musicLibraryStore.getSongById(songIds[nextIndex]) || null;
+        currentTime.value = 0
       }
       else {
         const allSongs = musicLibraryStore.allSongs()
@@ -40,6 +78,7 @@ export const usePlayerStore = defineStore('player-store', () => {
           const nextIndex = allSongs.findIndex(song => song.id === (curSong.id)) + 1
           if(nextIndex < allSongs.length) {
             currentSong.value = allSongs[nextIndex];
+            currentTime.value = 0
           }
         }
       }
@@ -52,6 +91,7 @@ export const usePlayerStore = defineStore('player-store', () => {
         const songIds = currentPlaylist.value.songIds
         const prevIndex = songIds.findIndex(id => id === (currentSong.value?.id ?? 0)) - 1
         currentSong.value = musicLibraryStore.getSongById(songIds[prevIndex]) || null;
+        currentTime.value = 0
       }
       else {
         const allSongs = musicLibraryStore.allSongs()
@@ -60,6 +100,7 @@ export const usePlayerStore = defineStore('player-store', () => {
           const prevIndex = allSongs.findIndex(song => song.id === (curSong.id)) - 1
           if(prevIndex >= 0) {
             currentSong.value = allSongs[prevIndex];
+            currentTime.value = 0
           }
         }
       }
@@ -100,17 +141,13 @@ export const usePlayerStore = defineStore('player-store', () => {
     return false
   }
 
-  function progressionPercentage() : number {
-    if (duration.value === 0) return 0
-    return (currentTime.value / duration.value) * 100
-  }
-
   return {
     currentSong,
     currentPlaylist,
     isPlaying,
     currentTime,   
     duration,
+    progress,
     playSong,
     pause,
     togglePlay,
@@ -118,6 +155,5 @@ export const usePlayerStore = defineStore('player-store', () => {
     previousSong,
     hasNextSong,
     hasPreviousSong,
-    progressionPercentage,
   }
 })
