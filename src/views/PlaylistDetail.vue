@@ -8,9 +8,9 @@ import type { Song } from '../types'
 // Just nu är playlist hårdkodat till första spellistan!
 // 
 // Importera och använd:
-// import { useRoute } from 'vue-router'
-// const route = useRoute()
-// const playlistId = computed(() => Number(route.params.id))
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const playlistId = computed(() => Number(route.params.id))
 // 
 // Hämta spellista baserat på route param:
 // import { useMusicLibraryStore } from '../stores/musicLibraryStore'
@@ -18,7 +18,7 @@ import type { Song } from '../types'
 // const playlist = computed(() => musicStore.getPlaylistById(playlistId.value))
 
 // PROBLEM: Hårdkodat till första spellistan - oavsett vilken URL!
-const playlist = ref(playlists[0])
+const playlist = ref(playlists[playlistId.value - 1])
 
 // Hämta låtarna som tillhör spellistan
 const playlistSongs = computed<Song[]>(() => {

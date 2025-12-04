@@ -29,11 +29,11 @@ const handlePlay = (song: Song) => {
 </script>
 
 <template>
-  <div class="song-list">
+  <div class="song-list" >
     <div 
       v-for="(song, index) in songs" 
       :key="song.id" 
-      class="song-item"
+      class="song-item" 
     >
       <span class="song-index">{{ index + 1 }}</span>
       <img :src="song.coverUrl" :alt="song.title" class="song-cover" />

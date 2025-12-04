@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Playlist } from '../types'
+import router from '../router'
 
 defineProps<{
   playlist: Playlist
@@ -12,8 +13,7 @@ defineProps<{
 // router.push(`/playlists/${playlist.id}`)
 
 const handleClick = (playlist: Playlist) => {
-  console.log('Klickade på spellista:', playlist.name)
-  console.log('Men det finns ingen routing... vi stannar här!')
+  router.push(`/playlists/${playlist.id}`)
 }
 </script>
 

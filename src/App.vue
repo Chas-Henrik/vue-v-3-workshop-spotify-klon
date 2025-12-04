@@ -23,7 +23,7 @@ const activeView = ref('library')
 // TODO: Ersätt denna funktion med <RouterLink> eller router.push()
 const navigateTo = (view: string) => {
   activeView.value = view
-  router.push(`/${view}`) // Navigera till den valda vyn
+  router.push({name: view}) // Navigera till den valda vyn
 
 //activeView.value = view // Gör ingenting utan riktig routing
 }
@@ -43,7 +43,7 @@ const navigateTo = (view: string) => {
         <button 
           class="nav-btn" 
           :class="{ active: activeView === 'library' }"
-          @click="navigateTo('')"
+          @click="navigateTo('library')"
         >
           Bibliotek
         </button>
