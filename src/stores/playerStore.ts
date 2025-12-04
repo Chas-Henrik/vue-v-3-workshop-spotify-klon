@@ -5,9 +5,9 @@ import { useMusicLibraryStore } from './musicLibraryStore'
 
 export const usePlayerStore = defineStore('player-store', () => {
   const musicLibraryStore = useMusicLibraryStore()
-
-  const currentSong = ref<Song | null>(null)
   const currentPlaylist = ref<Playlist | null>(null)
+  const currentSong = ref<Song | null>(null)
+  
   const isPlaying = ref<boolean>(false)
   const currentTime = ref<number>(0)
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import SongList from '../components/SongList.vue'
-import { playlists, songs as allSongs } from '../data/mockData'
 import type { Song } from '../types'
 
 // TODO: Använd route params för att visa rätt spellista
@@ -27,6 +27,19 @@ const playlistSongs = computed<Song[]>(() => {
     .map(id => musicStore.songsData.find(song => song.id === id))
     .filter((song): song is Song => song !== undefined)
 })
+
+import { usePlayerStore } from '../stores/playerStore.ts'
+const playerStore = usePlayerStore()
+const { currentPlaylist } = storeToRefs(playerStore)
+
+const handlePlay = () => {
+  if (!playlistSongs.value.length) return
+  currentPlaylist.value = playlist.value || null
+  if(playlistSongs.value.length > 0) {
+    playerStore.playSong(playlistSongs.value[0])
+  }
+}
+
 </script>
 
 <template>
@@ -45,7 +58,7 @@ const playlistSongs = computed<Song[]>(() => {
 
       <!-- Kontroller -->
       <div class="playlist-controls">
-        <button class="play-all-btn">
+        <button class="play-all-btn" @click="handlePlay">
           ▶ Spela alla
         </button>
       </div>
