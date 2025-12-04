@@ -5,29 +5,17 @@ import type { Song } from '../types'
 
 // TODO: Implementera sökning med musicLibraryStore
 // Importera och använd:
-// import { useMusicLibraryStore } from '../stores/musicLibraryStore'
-// const musicStore = useMusicLibraryStore()
-// 
-// Filtrera songs baserat på sökfrågan:
-// const searchResults = computed(() => {
-//   if (!searchQuery.value.trim()) return []
-//   const query = searchQuery.value.toLowerCase()
-//   return musicStore.songs.filter(song =>
-//     song.title.toLowerCase().includes(query) ||
-//     song.artist.toLowerCase().includes(query) ||
-//     song.album.toLowerCase().includes(query)
-//   )
-// })
+import { useMusicLibraryStore } from '../stores/musicLibraryStore'
+const musicStore = useMusicLibraryStore()
 
 const searchQuery = ref('')
 
 // PROBLEM: Sökresultaten är alltid tomma!
-// Ingen koppling till musicLibraryStore
-const searchResults = computed<Song[]>(() => {
-  console.log('Söker efter:', searchQuery.value)
-  console.log('Men det finns inga låtar att söka i... ingen store!')
-  return [] // Alltid tomt!
+const searchResults = computed(() => {
+  if (!searchQuery.value.trim()) return []
+  return musicStore.searchSongs(searchQuery.value)
 })
+
 </script>
 
 <template>
