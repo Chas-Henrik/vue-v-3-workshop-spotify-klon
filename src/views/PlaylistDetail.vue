@@ -60,7 +60,7 @@ const playlistSongs = computed<Song[]>(() => {
           <span class="column-header duration">⏱</span>
           <span class="column-header play"></span>
         </div>
-        <SongList :songs="playlistSongs" />
+        <SongList :songs="playlistSongs" :playlist="playlist"/>
       </section>
     </div>
 

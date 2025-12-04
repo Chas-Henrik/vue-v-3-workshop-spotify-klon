@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import type { Song, Playlist } from '../types'
 import { usePlayerStore } from '../stores/playerStore.ts'
 // TODO: När användaren klickar "Spela", uppdatera playerStore
@@ -10,7 +11,8 @@ import { usePlayerStore } from '../stores/playerStore.ts'
 // - actions: playSong(song), pause(), togglePlay()
 
 
-const playerstore = usePlayerStore()
+const playerStore = usePlayerStore()
+const { currentPlaylist } = storeToRefs(playerStore)
 const props = defineProps<{
   songs: Song[]
   playlist?: Playlist
@@ -25,10 +27,8 @@ const formatDuration = (seconds: number): string => {
 
 // TODO: Byt ut console.log mot playerStore.playSong(song)
 const handlePlay = (song: Song) => {
-  playerstore.currentPlaylist = props.playlist || null
-  console.log('Försöker spela:', song.title)
-  console.log('Men ingenting händer... spelaren vet inte om detta!')
-  // playerStore.playSong(song)
+  currentPlaylist.value = props.playlist || null
+  playerStore.playSong(song)
 }
 </script>
 

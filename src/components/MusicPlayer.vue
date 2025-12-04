@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { Song } from '../types'
+import { storeToRefs } from 'pinia'
+import { usePlayerStore } from '../stores/playerStore.ts'
 
 // TODO: Denna komponent använder lokalt state.
 // Flytta state till playerStore så att andra komponenter kan styra spelaren!
@@ -9,9 +9,9 @@ import type { Song } from '../types'
 // - state: currentSong, isPlaying, currentTime
 // - actions: playSong(song), pause(), resume(), togglePlay()
 
-const currentSong = ref<Song | null>(null)
-const isPlaying = ref(false)
-const currentTime = ref(0)
+const playerStore = usePlayerStore()
+const { currentSong, currentTime, duration, isPlaying } = storeToRefs(playerStore)
+
 
 // Formatera tid till MM:SS
 const formatTime = (seconds: number): string => {
@@ -21,28 +21,9 @@ const formatTime = (seconds: number): string => {
 }
 
 // Beräkna progress i procent
-const progressPercent = computed(() => {
-  if (!currentSong.value) return 0
-  return (currentTime.value / currentSong.value.duration) * 100
-})
 
 // TODO: Dessa funktioner bör anropa playerStore actions istället
-const togglePlay = () => {
-  if (!currentSong.value) {
-    console.log('Ingen låt vald! Spelaren vet inte vad som ska spelas.')
-    return
-  }
-  isPlaying.value = !isPlaying.value
-  console.log(isPlaying.value ? 'Spelar...' : 'Pausad')
-}
 
-const skipPrevious = () => {
-  console.log('Föregående låt - inte implementerat än')
-}
-
-const skipNext = () => {
-  console.log('Nästa låt - inte implementerat än')
-}
 </script>
 
 <template>
@@ -67,13 +48,13 @@ const skipNext = () => {
 
       <!-- Kontroller -->
       <div class="player-controls">
-        <button class="control-btn" @click="skipPrevious" title="Föregående">
+        <button class="control-btn" @click="playerStore.previousSong" title="Föregående" :disabled="!playerStore.hasPreviousSong()">
           ⏮
         </button>
-        <button class="control-btn play-btn" @click="togglePlay" :title="isPlaying ? 'Pausa' : 'Spela'">
+        <button class="control-btn play-btn" @click="playerStore.togglePlay" :title="isPlaying ? 'Pausa' : 'Spela'">
           {{ isPlaying ? '⏸' : '▶' }}
         </button>
-        <button class="control-btn" @click="skipNext" title="Nästa">
+        <button class="control-btn" @click="playerStore.nextSong" title="Nästa" :disabled="!playerStore.hasNextSong()">
           ⏭
         </button>
       </div>
@@ -82,9 +63,9 @@ const skipNext = () => {
       <div class="progress-section">
         <span class="time">{{ formatTime(currentTime) }}</span>
         <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+          <div class="progress-fill" :style="{ width: playerStore.progressionPercentage() + '%' }"></div>
         </div>
-        <span class="time">{{ currentSong ? formatTime(currentSong.duration) : '0:00' }}</span>
+        <span class="time">{{ currentSong ? formatTime(duration) : '0:00' }}</span>
       </div>
     </div>
   </div>
@@ -179,6 +160,12 @@ const skipNext = () => {
 .control-btn:hover {
   color: #fff;
   transform: scale(1.1);
+}
+
+.control-btn:disabled {
+  color: #4d4d4d;
+  cursor: default;
+  transform: none;
 }
 
 .play-btn {

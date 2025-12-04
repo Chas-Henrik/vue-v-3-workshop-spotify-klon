@@ -3,11 +3,10 @@ import { ref, computed } from "vue"
 import type { Playlist, Song } from '../types'
 import { songs, playlists } from '../data/mockData'
 
+const songsData = ref<Song[]>(songs)
+const playlistsData = ref<Playlist[]>(playlists)
 
 export const useMusicLibraryStore = defineStore('music-library', () => {
-  
-  const songsData = ref<Song[]>(songs)
-  const playlistsData = ref<Playlist[]>(playlists)
 
   function getPlaylistById(id: number) {
     return playlistsData.value.find(pl => pl.id === id)
