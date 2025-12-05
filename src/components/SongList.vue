@@ -12,7 +12,7 @@ import { usePlayerStore } from '../stores/playerStore.ts'
 
 
 const playerStore = usePlayerStore()
-const { currentPlaylist } = storeToRefs(playerStore)
+const { currentPlaylist, currentSong } = storeToRefs(playerStore)
 const props = defineProps<{
   songs: Song[]
   playlist?: Playlist
@@ -23,6 +23,11 @@ const formatDuration = (seconds: number): string => {
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
   return `${mins}:${secs.toString().padStart(2, '0')}`
+}
+
+// Check if song is the current song
+const isCurrentSongPlaying = (song: Song): boolean => {
+  return currentSong.value?.id === song.id
 }
 
 // TODO: Byt ut console.log mot playerStore.playSong(song)
@@ -37,7 +42,8 @@ const handlePlay = (song: Song) => {
     <div 
       v-for="(song, index) in songs" 
       :key="song.id" 
-      class="song-item" 
+      class="song-item"
+      :class="{ 'song-item-current': isCurrentSongPlaying(song) }"
     >
       <span class="song-index">{{ index + 1 }}</span>
       <img :src="song.coverUrl" :alt="song.title" class="song-cover" />
@@ -72,7 +78,11 @@ const handlePlay = (song: Song) => {
 }
 
 .song-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.song-item-current {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .song-index {
