@@ -28,7 +28,7 @@ const { currentSong, isPlaying } = storeToRefs(playerStore)
     <div v-else class="empty-state">
       <div class="empty-icon">🎧</div>
       <p>Ingen låt spelas just nu</p>
-      <span class="hint">Välj en låt från biblioteket</span>
+      <span class="hint">Välj en låt från biblioteket/spellistan</span>
     </div>
   </div>
 </template>

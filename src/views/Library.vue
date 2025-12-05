@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import SongList from '../components/SongList.vue'
+import { storeToRefs } from 'pinia'
+import { usePlayerStore } from '../stores/playerStore.ts'
+import NowPlaying from '../components/NowPlaying.vue'
 
 // TODO: Flytta songs till musicLibraryStore istället för lokalt state
 // Skapa stores/musicLibraryStore.ts med:
@@ -8,15 +11,23 @@ import SongList from '../components/SongList.vue'
 // - getters: allSongs, getSongById(id), getPlaylistById(id)
 // Importera och använd sedan:
 import { useMusicLibraryStore } from '../stores/musicLibraryStore.ts'
+
 const musicStore = useMusicLibraryStore()
 // Använd musicStore.songs istället för lokalt state
 
 const songs = ref(musicStore.songsData)
+
+const playerStore = usePlayerStore()
+const { isPlaying } = storeToRefs(playerStore)
+
 </script>
 
 <template>
   <div class="library-view">
-    <header class="view-header">
+    <header v-if="isPlaying" class="view-header" >
+      <NowPlaying />
+    </header>
+    <header v-else class="view-header">
       <h1>Ditt bibliotek</h1>
       <p class="subtitle">{{ songs.length }} låtar i ditt bibliotek</p>
     </header>

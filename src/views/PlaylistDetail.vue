@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import SongList from '../components/SongList.vue'
 import type { Song } from '../types'
+import NowPlaying from '../components/NowPlaying.vue'
 
 // TODO: Använd route params för att visa rätt spellista
 // Just nu är playlist hårdkodat till första spellistan!
@@ -44,7 +45,10 @@ const handlePlay = () => {
 
 <template>
   <div class="playlist-detail-view">
-    <div v-if="playlist" class="playlist-content">
+    <div v-if="playerStore.isPlaying">
+      <NowPlaying />
+    </div>
+    <div v-else-if="playlist" class="playlist-content">
       <!-- Header med spellistinfo -->
       <header class="playlist-header">
         <img :src="playlist.coverUrl" :alt="playlist.name" class="playlist-cover" />
@@ -62,8 +66,8 @@ const handlePlay = () => {
           ▶ Spela alla
         </button>
       </div>
-
-      <!-- Låtlista -->
+    </div>
+    <div v-if="playlist" class="playlist-content">
       <section class="song-section">
         <div class="section-header">
           <span class="column-header index">#</span>
